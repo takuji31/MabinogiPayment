@@ -1,7 +1,7 @@
 :cascade layout
 
 :around content -> {
-    <h2>実際の課金ログ一覧</h2>
+    <h1>実際の課金ログ一覧</h1>
     : pager()
     <table class="zebra-striped">
         <tr>
@@ -14,8 +14,12 @@
         <tr>
           <td><: $row.type :></td>
           <td><: $row.point :></td>
-          <td><: $row.memo :></td>
-          <td><: $row.created_at.strftime('%Y/%m/%d %H:%M') :></td>
+          <td>
+            <a href="/item/<: $row.memo :>">
+                <: $row.memo :>
+            </a>
+          </td>
+          <td><: $row.created_on.ymd('/') :></td>
         </tr>
         :}
     </table>

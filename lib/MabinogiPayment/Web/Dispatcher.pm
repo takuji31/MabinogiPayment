@@ -23,17 +23,19 @@ any '/list' => sub {
 };
 
 any '/item/:name' => sub {
-    my ($c) = @_;
-    my $name = $c->args->{name};
+    my ($c, $param) = @_;
+    my $name = $param->{name};
     my $report = MabinogiPayment::Model::Payment->report_by_item(name => $name);
     $c->stash->{report} = $report;
+    $c->stash->{name} = $name;
     $c->render('item.tx');
 };
 
-post '/account/logout' => sub {
-    my ($c) = @_;
-    $c->session->expire();
-    $c->redirect('/');
+any '/ranking' => sub {
+    my ($c, $param) = @_;
+    my $ranking = MabinogiPayment::Model::Payment->ranking;
+    $c->stash->{ranking} = $ranking;
+    $c->render('ranking.tx');
 };
 
 1;

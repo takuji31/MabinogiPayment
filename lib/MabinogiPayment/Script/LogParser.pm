@@ -32,9 +32,10 @@ package MabinogiPayment::Script::LogParser {
             my ($id, $type, $point, $memo, $date) = split /\t/, $row;
             $point =~ s/,//g;
             $date =~ s/ ([0-9]):/ 0$1:/;
+            $date =~ s/\n//;
             my $data = $db->single(payment => {id => $id});
             $data = $db->insert(payment => {id => $id}) unless $data;
-            $data->update({type => $type, point => $point, memo => $memo, created_at => localtime->strptime($date, '%Y/%m/%d %H:%M')});
+            $data->update({type => $type, point => $point, memo => $memo, created_on => localtime->strptime($date, '%Y/%m/%d %H:%M')});
         }
 
     }

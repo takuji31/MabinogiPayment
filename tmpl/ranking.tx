@@ -1,0 +1,66 @@
+:cascade layout
+
+:around content -> {
+    <h1>ランキング</h1>
+    <h2>アイテムごとの件数</h2>
+    <table class="zebra-striped">
+        <tr>
+          <th>ランキング</th>
+          <th>アイテム</th>
+          <th>件数</th>
+        </tr>
+        :for $ranking.count -> $row {
+        <tr>
+          <td><: $~row.count :>位</td>
+          <td><: $row.name :></td>
+          <td><: $row.cnt :></td>
+        </tr>
+        :}
+    </table>
+    <h2>アイテムごとの金額</h2>
+    <table class="zebra-striped">
+        <tr>
+          <th>ランキング</th>
+          <th>アイテム</th>
+          <th>金額</th>
+        </tr>
+        :for $ranking.point -> $row {
+        <tr>
+          <td><: $~row.count :>位</td>
+          <td><: $row.name :></td>
+          <td><: $row.point :></td>
+        </tr>
+        :}
+    </table>
+    <h2>月ごとの件数</h2>
+    <table class="zebra-striped">
+        <tr>
+          <th>ランキング</th>
+          <th>月</th>
+          <th>件数</th>
+        </tr>
+        :for $ranking.monthly_count -> $row {
+        <tr>
+          <td><: $~row.count :>位</td>
+          <td><: $row.month :></td>
+          <td><: $row.cnt :></td>
+        </tr>
+        :}
+    </table>
+    <h2>月ごとの金額</h2>
+    <table class="zebra-striped">
+        <tr>
+          <th>ランキング</th>
+          <th>アイテム</th>
+          <th>金額</th>
+        </tr>
+        :for $ranking.monthly_point -> $row {
+        <tr>
+          <td><: $~row.count :>位</td>
+          <td><: $row.month :></td>
+          <td><: $row.point :></td>
+        </tr>
+        :}
+    </table>
+:}
+

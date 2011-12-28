@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS payment (
     `type`      VARCHAR(255)        NOT NULL,
     point       INTEGER UNSIGNED    NOT NULL,
     memo        VARCHAR(255)        NOT NULL,
-    created_at  DATETIME            NOT NULL,
+    created_on  DATE                NOT NULL,
     INDEX (`type`),
     INDEX (point),
     INDEX (memo),
-    INDEX (created_at)
+    INDEX (created_on)
 );

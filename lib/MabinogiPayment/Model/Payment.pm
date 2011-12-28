@@ -27,7 +27,7 @@ sub list {
         rows  => {isa => 'Int', default => 20},
     )->with(qw/Method/);
     my ($class, $args) = $validator->validate(@_);
-    return $class->search_with_pager({}, {order_by => {created_at => 'ASC'}, %$args});
+    return $class->search_with_pager({}, {order_by => {created_on => 'ASC'}, %$args});
 }
 
 sub report_by_item {
@@ -35,7 +35,62 @@ sub report_by_item {
         name => {isa => 'Str'},
     )->with(qw/Method/);
     my ($class, $args) = $validator->validate(@_);
-    
+    my $name = $args->{name};
+    my $db = $class->get_db;
+    return {
+        cnt => $db->search_named(q{SELECT COUNT(id) AS cnt FROM payment WHERE memo=:name}, {name => $name}, [])->next->cnt,
+        point => $db->search_named(q{SELECT SUM(point) AS point FROM payment WHERE memo=:name}, {name => $name}, [])->next->point,
+    };
+}
+
+sub ranking {
+    my $class = shift;
+    my $db = $class->get_db;
+    my $limit = 10;
+    return {
+        count => [
+            map {$_->get_columns} $db->search_named(
+                qq{
+                    SELECT memo AS name, COUNT(id) as cnt FROM payment
+                    GROUP BY memo
+                    ORDER BY COUNT(id) DESC
+                    LIMIT $limit
+                },
+                {},
+            )->all
+        ],
+        point => [
+            map {$_->get_columns} $db->search_named(
+                qq{
+                    SELECT memo AS name, SUM(point) as point FROM payment
+                    GROUP BY memo
+                    ORDER BY SUM(point) DESC
+                    LIMIT $limit
+                },
+                {},
+            )->all
+        ],
+        monthly_count => [
+            map {$_->get_columns} $db->search_named(
+                qq{
+                    SELECT DATE_FORMAT(created_on, '%m月') AS month, COUNT(id) as cnt FROM payment
+                    GROUP BY DATE_FORMAT(created_on, '%m')
+                    ORDER BY COUNT(id) DESC
+                },
+                {},
+            )->all
+        ],
+        monthly_point => [
+            map {$_->get_columns} $db->search_named(
+                qq{
+                    SELECT DATE_FORMAT(created_on, '%m月') AS month, SUM(point) as point FROM payment
+                    GROUP BY DATE_FORMAT(created_on, '%m')
+                    ORDER BY SUM(point) DESC
+                },
+                {},
+            )->all
+        ],
+    };
 }
 
 1;

@@ -12,5 +12,9 @@ return +{
             title => 'PaymentList',
             link  => '/list',
         },
+        {
+            title => 'Ranking',
+            link  => '/ranking',
+        },
     ]
 };

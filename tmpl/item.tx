@@ -1,0 +1,8 @@
+:cascade layout
+
+:around content -> {
+    <h1>アイテムごとの課金ログ - <: $name :></h1>
+    <p>課金件数：<: $report.cnt :>件</p>
+    <p>合計課金額：￥<: $report.point :></p>
+:}
+
