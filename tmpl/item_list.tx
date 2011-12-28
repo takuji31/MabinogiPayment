@@ -1,0 +1,21 @@
+:cascade layout
+
+:around content -> {
+    <h1>アイテムリスト</h1>
+    : pager()
+    <table class="zebra-striped">
+        <tr>
+          <th>名前</th>
+        </tr>
+        :for $rows -> $row {
+        <tr>
+          <td>
+            <a href="/item/<: $row.memo :>">
+                <: $row.memo :>
+            </a>
+          </td>
+        </tr>
+        :}
+    </table>
+:}
+

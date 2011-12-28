@@ -43,6 +43,16 @@ sub report_by_item {
     };
 }
 
+sub item_list {
+    state $validator = Data::Validator->new(
+        page  => {isa => 'Int', default => 1},
+        rows  => {isa => 'Int', default => 20},
+    )->with(qw/Method/);
+    my ($class, $args) = $validator->validate(@_);
+    return $class->search_with_pager({}, {order_by => {memo => 'ASC'}, columns => [qw/memo/], prefix => 'SELECT DISTINCT ', %$args});
+
+}
+
 sub ranking {
     my $class = shift;
     my $db = $class->get_db;

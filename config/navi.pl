@@ -13,6 +13,10 @@ return +{
             link  => '/list',
         },
         {
+            title => 'ItemList',
+            link  => '/item/',
+        },
+        {
             title => 'Ranking',
             link  => '/ranking',
         },
