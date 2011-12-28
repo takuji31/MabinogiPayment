@@ -50,20 +50,6 @@
                     : }
                   : }
                 </ul>
-                <form class="pull-left" action="">
-                    <input type="text" placeholder="Search">
-                </form>
-                <ul class="nav secondary-nav">
-                    <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Dropdown</a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Secondary link</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Another link</a></li>
-                    </ul>
-                    </li>
-                </ul>
                 </div>
             </div><!-- /topbar-inner -->
         </div><!-- /topbar -->
@@ -78,3 +64,31 @@
     </div>
 </body>
 </html>
+:macro pager -> {
+:if defined $pager {
+    <div class="pagination">
+        <ul>
+            :if $pager.previous_page {
+                <li class="prev"><a href="<: uri_with({page => $pager.previous_page}) :>" rel="previous">&larr; Back</a><li>
+            :} else {
+                <li class="prev disabled"><a href="#">&larr; Back</a><li>
+            :}
+
+            :if $pager.can('pages_in_navigation') {
+                <: # IF Data::Page::Navigation is loaded :>
+                : for $pager.pages_in_navigation(5) -> $p {
+                <li <: if $p == $pager.current_page { :>class="active"<: } :>><a href="<: uri_with({page => $p}) :>"><: p :></a></li>
+                :}
+            :} else {
+                <li><a href="#"><: $pager.current_page :></a></li>
+            :}
+
+            :if $pager.next_page() {
+                <li class="next"><a href="<: uri_with({page => $pager.next_page}) :>" rel="next">Next &rarr;</a><li>
+            :} else {
+                <li class="next disabled"><a href="#">Next &rarr;</a><li>
+            :}
+        </ul>
+    </div>
+:}
+:}

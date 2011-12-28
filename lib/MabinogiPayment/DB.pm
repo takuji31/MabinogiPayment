@@ -15,6 +15,7 @@ package MabinogiPayment::DB {
     use MabinogiPayment;
 
     __PACKAGE__->load_plugin('FindOrCreate');
+    __PACKAGE__->load_plugin('Pager');
 
     sub conf {MabinogiPayment->config}
 

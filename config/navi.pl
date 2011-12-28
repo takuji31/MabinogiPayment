@@ -8,5 +8,9 @@ return +{
             title => 'Home',
             link  => '/',
         },
+        {
+            title => 'PaymentList',
+            link  => '/list',
+        },
     ]
 };

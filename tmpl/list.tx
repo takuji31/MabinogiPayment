@@ -1,0 +1,23 @@
+:cascade layout
+
+:around content -> {
+    <h2>実際の課金ログ一覧</h2>
+    : pager()
+    <table class="zebra-striped">
+        <tr>
+          <th>ショップ</th>
+          <th>金額</th>
+          <th>内容</th>
+          <th>日時</th>
+        </tr>
+        :for $rows -> $row {
+        <tr>
+          <td><: $row.type :></td>
+          <td><: $row.point :></td>
+          <td><: $row.memo :></td>
+          <td><: $row.created_at.strftime('%Y/%m/%d %H:%M') :></td>
+        </tr>
+        :}
+    </table>
+:}
+
