@@ -36,6 +36,7 @@ get '/item/:name' => sub {
     my $name = $param->{name};
     my $report = MabinogiPayment::Model::Payment->report_by_item(name => $name);
     $c->stash->{report} = $report;
+    $c->stash->{name} = $name;
     $c->render('item.tx');
 };
 
