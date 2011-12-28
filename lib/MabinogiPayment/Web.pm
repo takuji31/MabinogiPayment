@@ -5,6 +5,11 @@ use utf8;
 use parent qw/MabinogiPayment Amon2::Web/;
 use File::Spec;
 
+use Class::Accessor::Lite (
+    new => 0,
+    rw  => [qw/stash/],
+);
+
 # dispatcher
 use MabinogiPayment::Web::Dispatcher;
 sub dispatch {
@@ -19,7 +24,7 @@ use Text::Xslate;
         $view_conf->{path} = [ File::Spec->catdir(__PACKAGE__->base_dir(), 'tmpl') ];
     }
     my $view = Text::Xslate->new(+{
-        'syntax'   => 'TTerse',
+        'syntax'   => 'Kolon',
         'module'   => [ 'Text::Xslate::Bridge::Star' ],
         'function' => {
             c => sub { Amon2->context() },
@@ -66,12 +71,20 @@ __PACKAGE__->add_trigger(
     },
 );
 
+use Amon2::Config::Simple;
 __PACKAGE__->add_trigger(
     BEFORE_DISPATCH => sub {
         my ( $c ) = @_;
-        # ...
+        $c->stash({navi => Amon2::Config::Simple->load($c, {environment => 'navi'})->{nav}});
         return;
     },
 );
+
+sub render {
+    my ($c, $path, $data) = @_;
+    $data ||= {};
+    $data = {%{$c->stash()}, $data};
+    return $c->SUPER::render($path, $data);
+}
 
 1;

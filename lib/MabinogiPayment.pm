@@ -1,26 +1,31 @@
-package MabinogiPayment;
-use strict;
+use 5.014001;
 use warnings;
-use utf8;
-use parent qw/Amon2/;
-our $VERSION='0.01';
-use 5.008001;
+package MabinogiPayment {
+    use parent qw/Amon2/;
 
-__PACKAGE__->load_plugin(qw/DBI/);
-
-# initialize database
-use DBI;
-sub setup_schema {
-    my $self = shift;
-    my $dbh = $self->dbh();
-    my $driver_name = $dbh->{Driver}->{Name};
-    my $fname = lc("sql/${driver_name}.sql");
-    open my $fh, '<:encoding(UTF-8)', $fname or die "$fname: $!";
-    my $source = do { local $/; <$fh> };
-    for my $stmt (split /;/, $source) {
-        next unless $stmt =~ /\S/;
-        $dbh->do($stmt) or die $dbh->errstr();
+    # initialize database
+    use MabinogiPayment::DB;
+    use DBI;
+    sub setup_schema {
+        my $self = shift;
+        my $dbh = MabinogiPayment::DB->get_dbh;
+        my $driver_name = $dbh->{Driver}->{Name};
+        my $fname = lc("sql/${driver_name}.sql");
+        open my $fh, '<:encoding(UTF-8)', $fname or die "$fname: $!";
+        my $source = do { local $/; <$fh> };
+        for my $stmt (split /;/, $source) {
+            next unless $stmt =~ /\S/;
+            $dbh->do($stmt) or die $dbh->errstr();
+        }
     }
-}
 
+    sub get_db {
+        my $self = shift;
+        if ( !defined $self->{db} ) {
+            $self->{db} = MabinogiPayment::DB->get_db;
+        }
+        return $self->{db};
+    }
+
+}
 1;

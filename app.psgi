@@ -11,12 +11,13 @@ use MabinogiPayment;
 use Plack::Session::Store::DBI;
 use Plack::Session::State::Cookie;
 use DBI;
+use DBIx::QueryLog;
 
 {
     my $c = MabinogiPayment->new();
     $c->setup_schema();
 }
-my $db_config = MabinogiPayment->config->{DBI} || die "Missing configuration for DBI";
+my $db_config = MabinogiPayment->config->{datasource} || die "Missing configuration for DBI";
 builder {
     enable 'Plack::Middleware::Static',
         path => qr{^(?:/static/)},
